@@ -1,7 +1,7 @@
 from .models import Profile
 from .serializers import ProfileSerializer
 
-from rest_framework import permissions, viewsets, status
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 
 

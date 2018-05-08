@@ -1,7 +1,7 @@
 from .models import Tweet
 from .serializers import TweetSerializer
 
-from rest_framework import permissions, viewsets, status
+from rest_framework import viewsets, status
 from rest_framework.response import Response
 
 
