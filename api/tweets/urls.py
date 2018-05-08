@@ -1,10 +1,11 @@
 from django.conf.urls import url
+
 from rest_framework.urlpatterns import format_suffix_patterns
-from . import views
+from rest_framework.routers import DefaultRouter
 
-urlpatterns = [
-    url(r'^$', views.TweetList.as_view()),
-    url(r'^(?P<pk>[0-9]+)/$', views.TweetDetail.as_view()),
-]
+from .views import TweetViewSet
 
-urlpatterns = format_suffix_patterns(urlpatterns)
+router = DefaultRouter()
+router.register(r'tweets', TweetViewSet, base_name='tweets')
+
+urlpatterns = router.urls
