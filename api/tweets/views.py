@@ -15,7 +15,10 @@ class TweetViewSet(viewsets.ModelViewSet):
         return Response(serializer.data)
 
     def create(self, request, *args, **kwargs):
-        serializer = TweetSerializer(data=request.data)
+        serializer = TweetSerializer(
+            data=request.data,
+            context={'request': request}
+        )
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         headers = self.get_success_headers(serializer.data)
@@ -35,8 +38,14 @@ class TweetViewSet(viewsets.ModelViewSet):
         instance = Tweet.objects.filter(
             pk=kwargs.get('pk')
         ).first()
+
+        if (instance.user != request.user):
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
         serializer = TweetSerializer(
-            instance, data=request.data, partial=partial
+            instance,
+            data=request.data,
+            partial=partial
         )
         serializer.is_valid(raise_exception=True)
         self.perform_update(serializer)
@@ -46,7 +55,10 @@ class TweetViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         instance = Tweet.objects.filter(
             pk=kwargs.get('pk'),
-        )
-        self.perform_destroy(instance)
+        ).first()
 
+        if (instance.user != request.user):
+            return Response(status=status.HTTP_401_UNAUTHORIZED)
+
+        self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
