@@ -18,7 +18,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         instance.username = validated_data['username']
         instance.bio = validated_data['bio']
-        if validated_data['password']:
+        if 'password' in validated_data:
             instance.set_password(validated_data['password'])
         instance.save()
 
